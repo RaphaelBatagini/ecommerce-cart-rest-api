@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  config:
+    container_name: '${PROJECT_NAME}_config'
+    image: 'composer:2.1.5'
+    volumes:
+      - './:/app'
+    command: composer install --ignore-platform-reqs
+  
+  api:
+    container_name: '${PROJECT_NAME}_api'
+    image: 'php:7.4-apache'
+    ports:
+      - '80:80'
+    volumes:
+      - './:/var/www/html'
+    depends_on:
+      config:
+        condition: service_completed_successfully
+ 

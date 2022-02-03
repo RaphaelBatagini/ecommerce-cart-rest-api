@@ -1,0 +1,21 @@
+{
+    "name": "root/hash_backend_challenge",
+    "description": "Teste para vaga de desenvolvedor backend da Hash",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Root\\HashBackendChallenge\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Raphael Batagini",
+            "email": "raphabatagini@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
