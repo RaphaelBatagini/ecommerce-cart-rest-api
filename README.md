@@ -1,2 +1,2 @@
-# hash-backend-challenge
+# Hash Backend Challenge
 Teste para vaga de desenvolvedor backend da Hash
