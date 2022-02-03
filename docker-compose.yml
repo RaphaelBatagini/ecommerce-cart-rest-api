@@ -17,4 +17,10 @@ services:
     depends_on:
       config:
         condition: service_completed_successfully
+
+  discount-service:
+    container_name: '${PROJECT_NAME}_discount_service'
+    image: hashorg/hash-mock-discount-service
+    ports:
+      - '50051:50051'
  
