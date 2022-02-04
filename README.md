@@ -33,6 +33,6 @@ $ docker run --rm --interactive --tty \
 ## Atualizando os clients gRPC
 Caso seja criado ou alterado algum proto file, é possível atualizá-los utilizando o seguinte comando:
 ```
-$ docker run -v `pwd`:/defs namely/protoc-all -f discount.proto -l php -o src/
+$ docker run -v `pwd`:/defs namely/protoc-all -f discount.proto -l php -o src/Proto/
 ```
 <small>No exemplo acima, estão sendo geradas as classes para o arquivo `discount.proto`</smal>.
