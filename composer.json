@@ -7,7 +7,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Root\\HashBackendChallenge\\": "src/"
+            "Root\\HashBackendChallenge\\": "src/",
+            "Discount\\": "src/Proto/Discount/",
+            "GPBMetadata\\": "src/Proto/GPBMetadata/"
         }
     },
     "authors": [
