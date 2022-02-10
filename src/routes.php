@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Root\HashBackendChallenge;
 
 use CoffeeCode\Router\Router;
 
@@ -14,7 +14,7 @@ $router->namespace(CONTROLLERS_NAMESPACE);
 $router->get('/', 'IndexController:index');
 
 $router->group('cart')->namespace(CONTROLLERS_NAMESPACE);
-$router->post('/add/{productId}', 'CartsController:addProduct');
+$router->get('/add/{productId}', 'CartController:addProduct');
 
 $router->group('error')->namespace(CONTROLLERS_NAMESPACE);
 $router->get('/{errcode}', 'IndexController:error');
