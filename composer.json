@@ -22,6 +22,7 @@
     "require": {
         "google/protobuf": "^3.19",
         "grpc/grpc": "^1.42",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+        "coffeecode/router": "^1.0"
     }
 }
