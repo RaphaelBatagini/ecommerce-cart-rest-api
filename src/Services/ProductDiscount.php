@@ -16,29 +16,35 @@ class ProductDiscount
     {
         $this->client = new DiscountClient(
             $host,
-            ['credentials' => ChannelCredentials::createDefault()]
+            [
+                'credentials' => ChannelCredentials::createInsecure()
+            ]
         );
     }
 
     /**
      * @throws GrpcException
      */
-    public function getProductDiscount(int $productId): mixed
+    public function getProductDiscount(int $productId): float
     {
-        $getDiscountRequest = new GetDiscountRequest();
-        $getDiscountRequest->setProductID($productId);
-        $response = $this->client
-            ->GetDiscount($getDiscountRequest)
-            ->wait();
+        try {
+            $getDiscountRequest = new GetDiscountRequest();
+            $getDiscountRequest->setProductID($productId);
+            $response = $this->client
+                ->GetDiscount($getDiscountRequest)
+                ->wait();
 
-        $this->handleErrorResponse($response);
+            $this->handleErrorResponse($response);
 
-        return $response[0]->getMessage();
+            return $response[0]->getPercentage();
+        } catch (GrpcException $e) {
+            return 0;
+        }
     }
 
     private function handleErrorResponse(array $response): void
     {
-        if ($response[1]->code !== 200) {
+        if ($response[1]->code !== 0) {
             throw new GrpcException(
                 sprintf(
                     'gRPC request failed : error code: %s, details: %s',
