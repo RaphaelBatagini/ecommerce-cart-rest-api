@@ -9,7 +9,6 @@ services:
   
   api:
     container_name: '${PROJECT_NAME}_api'
-    #image: 'php:7.4-apache'
     build: .
     ports:
       - '80:80'
