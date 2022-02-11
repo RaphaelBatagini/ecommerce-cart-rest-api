@@ -1,8 +1,8 @@
 <?php
 
-namespace Root\HashBackendChallenge\Services;
+namespace App\Services;
 
-use Root\HashBackendChallenge\Exception\GrpcException;
+use App\Exceptions\GrpcException;
 use Discount\DiscountClient;
 use Discount\GetDiscountRequest;
 use Grpc\ChannelCredentials;

@@ -1,7 +1,7 @@
 <?php
 
-namespace Root\HashBackendChallenge\Exception;
- 
+namespace App\Exceptions;
+
 class GrpcException extends \Exception
 {
 

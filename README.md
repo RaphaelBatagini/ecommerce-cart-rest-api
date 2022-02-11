@@ -2,12 +2,10 @@
 Teste para vaga de desenvolvedor backend da Hash
 
 ## Stack utilizada
-- PHP 7.4
-- PHPUnit 9.5
+- PHP 8.0.2
+- Framework Lumen 8
 - Docker
 - Docker Compose
-
-Obs: Não foi utilizado nenhum framework PHP na construção da API afim de demonstrar melhor meus conhecimentos. Considerando uma aplicação real, entendo que esta mesma abordagem não seria a ideal.
 
 ## Executando a aplicação
 Copiar o conteúdo do arquivo **.env.example** para um novo arquivo **.env**.
@@ -33,6 +31,6 @@ $ docker run --rm --interactive --tty \
 ## Atualizando os clients gRPC
 Caso seja criado ou alterado algum proto file, é possível atualizá-los utilizando o seguinte comando:
 ```
-$ docker run -v `pwd`:/defs namely/protoc-all -f discount.proto -l php -o src/Proto/
+$ docker run -v `pwd`:/defs namely/protoc-all -f discount.proto -l php -o app/Proto/
 ```
 <small>No exemplo acima, estão sendo geradas as classes para o arquivo `discount.proto`</smal>.
