@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\ProductDiscount;
 use App\Exceptions\ProductException;
+use App\Services\Product;
 
 class CartController extends Controller
 {
     public function __construct()
     {
-        $this->productDiscountService = new ProductDiscount(
-            $_ENV['GRPC_DISCOUNT_SERVICE_HOST']
-        );
+        $this->productDiscountService = new ProductDiscount();
     }
 
     public function addProduct(Request $request)
@@ -30,19 +29,40 @@ class CartController extends Controller
                 );
             }
 
-            foreach ($params['products'] as &$product) {
-                $this->validateProduct($product);
+            $products = $this->processProducts($params['products']);
 
-                // TODO: Buscar infos dos produtos em arquivo JSON
-
-                $product['discount'] = $this->productDiscountService
-                    ->getProductDiscount($product['id']);
-            }
-
-            return response($params['products'], 200);
+            return response($products, 200);
         } catch (\Exception $e) {
             return response($e->getMessage(), 422);
         }
+    }
+
+    private function processProducts($products)
+    {
+        foreach ($products as &$product) {
+            $product = $this->processSingleProduct($product);
+        }
+
+        return $products;
+    }
+
+    private function processSingleProduct($product)
+    {
+        $this->validateProduct($product);
+
+        $productService = new Product();
+        $productObject = $productService->get($product['id']);
+
+        if (!$productObject) {
+            throw new ProductException(
+                "Produto de ID {$product['id']} não encontrado"
+            );
+        }
+
+        $productObject->discount = $this->productDiscountService
+            ->getProductDiscount($product['id']);
+
+        return $productObject;
     }
 
     private function validateProduct($product)
