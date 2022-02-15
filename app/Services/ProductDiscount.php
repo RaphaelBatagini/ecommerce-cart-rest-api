@@ -12,10 +12,10 @@ class ProductDiscount
     /** @var  DiscountClient */
     private $client;
 
-    public function __construct(string $host)
+    public function __construct()
     {
         $this->client = new DiscountClient(
-            $host,
+            $_ENV['GRPC_DISCOUNT_SERVICE_HOST'],
             [
                 'credentials' => ChannelCredentials::createInsecure()
             ]
