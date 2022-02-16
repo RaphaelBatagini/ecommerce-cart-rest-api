@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\ProductDiscount;
 use App\Exceptions\ProductException;
 use App\Services\Product;
 
 class CartController extends Controller
 {
-    public function __construct()
-    {
-        $this->productDiscountService = new ProductDiscount();
-    }
+    private $products;
 
     public function addProduct(Request $request)
     {
@@ -29,9 +25,10 @@ class CartController extends Controller
                 );
             }
 
-            $products = $this->processProducts($params['products']);
+            $this->products = $this->processProducts($params['products']);
+            $this->addGiftProduct();
 
-            return response($products, 200);
+            return response($this->products, 200);
         } catch (\Exception $e) {
             return response($e->getMessage(), 422);
         }
@@ -53,16 +50,15 @@ class CartController extends Controller
         $productService = new Product();
         $productObject = $productService->get($product['id']);
 
-        if (!$productObject) {
+        if (!$productObject || $productObject->is_gift) {
             throw new ProductException(
-                "Produto de ID {$product['id']} não encontrado"
+                "Produto de ID {$product['id']} não encontrado ou não permitido"
             );
         }
 
-        $productObject->discount = $this->productDiscountService
-            ->getProductDiscount($product['id']);
+        $productObject->quantity = $product['quantity'];
 
-        return $productObject;
+        return $productService->calculateValues($productObject);
     }
 
     private function validateProduct($product)
@@ -72,5 +68,35 @@ class CartController extends Controller
                 'Products should have id and quantity index'
             );
         }
+    }
+
+    private function addGiftProduct(): void
+    {
+        if (!$this->isBlackFriday()) {
+            return;
+        }
+
+        $productService = new Product();
+        $giftProducts = $productService->find(['is_gift' => true]);
+
+        if (empty($giftProducts)) {
+            return;
+        }
+
+        $giftProductObject = array_shift($giftProducts);
+        $giftProductObject->quantity = 1;
+        $giftProductObject = $productService->calculateValues(
+            $giftProductObject
+        );
+
+        array_push($this->products, $giftProductObject);
+    }
+
+    private function isBlackFriday()
+    {
+        $currentDate = date('Y/m/d');
+        $blackFridayDate = $_ENV['BLACKFRIDAY_DATE'] ?? '';
+
+        return $currentDate === $blackFridayDate;
     }
 }
