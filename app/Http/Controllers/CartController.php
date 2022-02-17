@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\CartDTO;
 use Illuminate\Http\Request;
 use App\Exceptions\ProductException;
-use App\Services\Product;
+use App\Services\ProductService;
 
 class CartController extends Controller
 {
-    private $products;
+    private $cart;
+
+    public function __construct()
+    {
+        $this->cart = new CartDTO();
+    }
 
     public function addProduct(Request $request)
     {
@@ -21,57 +27,33 @@ class CartController extends Controller
 
             $params = $request->json()->all();
 
-            $this->products = $this->processProducts($params['products']);
+            foreach ($params['products'] as $product) {
+                $this->cart->addProduct(
+                    $this->getProductData($product['id']),
+                    $product['quantity']
+                );
+            }
+
             $this->addGiftProduct();
 
-            return response($this->getResume($this->products), 200);
+            return response($this->cart->getData(), 200);
         } catch (\Exception $e) {
             return response($e->getMessage(), 422);
         }
     }
 
-    private function getResume(array $products): array
+    private function getProductData($productId)
     {
-        $cartResume = [
-            'total_amount' => 0,
-            'total_amount_with_discount' => 0,
-            'total_discount' => 0,
-        ];
-        foreach ($products as $product) {
-            $cartResume['total_amount'] += $product->total_amount;
-            $cartResume['total_amount_with_discount'] += (
-                $product->total_amount - $product->discount
-            );
-            $cartResume['total_discount'] += $product->discount;
-        }
+        $productService = new ProductService();
+        $product = $productService->get($productId);
 
-        $cartResume['products'] = $products;
-        return $cartResume;
-    }
-
-    private function processProducts($products)
-    {
-        foreach ($products as &$product) {
-            $product = $this->processSingleProduct($product);
-        }
-
-        return $products;
-    }
-
-    private function processSingleProduct($product)
-    {
-        $productService = new Product();
-        $productObject = $productService->get($product['id']);
-
-        if (!$productObject || $productObject->is_gift) {
+        if (!$product || $product->getIsGift()) {
             throw new ProductException(
                 "Produto de ID {$product['id']} não encontrado ou não permitido"
             );
         }
 
-        $productObject->quantity = $product['quantity'];
-
-        return $productService->calculateValues($productObject);
+        return $product;
     }
 
     private function addGiftProduct(): void
@@ -80,20 +62,16 @@ class CartController extends Controller
             return;
         }
 
-        $productService = new Product();
-        $giftProducts = $productService->find(['is_gift' => true]);
+        $productService = new ProductService();
+        $giftProducts = $productService->getAllGiftProducts();
 
         if (empty($giftProducts)) {
             return;
         }
 
-        $giftProductObject = array_shift($giftProducts);
-        $giftProductObject->quantity = 1;
-        $giftProductObject = $productService->calculateValues(
-            $giftProductObject
-        );
+        $giftProduct = $giftProducts[0];
 
-        array_push($this->products, $giftProductObject);
+        $this->cart->addProduct($giftProduct, 1);
     }
 
     private function isBlackFriday()
