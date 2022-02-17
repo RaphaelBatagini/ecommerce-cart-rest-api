@@ -15,6 +15,8 @@ class CartController extends Controller
         try {
             $this->validate($request, [
                 'products' => 'required',
+                'products.*.id' => 'required|integer',
+                'products.*.quantity' => 'required|integer',
             ]);
 
             $params = $request->json()->all();
@@ -22,10 +24,7 @@ class CartController extends Controller
             $this->products = $this->processProducts($params['products']);
             $this->addGiftProduct();
 
-            return response(
-                $this->getResume($this->products),
-                200
-            );
+            return response($this->getResume($this->products), 200);
         } catch (\Exception $e) {
             return response($e->getMessage(), 422);
         }
@@ -61,8 +60,6 @@ class CartController extends Controller
 
     private function processSingleProduct($product)
     {
-        $this->validateProduct($product);
-
         $productService = new Product();
         $productObject = $productService->get($product['id']);
 
@@ -75,15 +72,6 @@ class CartController extends Controller
         $productObject->quantity = $product['quantity'];
 
         return $productService->calculateValues($productObject);
-    }
-
-    private function validateProduct($product)
-    {
-        if (empty($product['id']) || empty($product['quantity'])) {
-            throw new ProductException(
-                'Products should have id and quantity index'
-            );
-        }
     }
 
     private function addGiftProduct(): void
