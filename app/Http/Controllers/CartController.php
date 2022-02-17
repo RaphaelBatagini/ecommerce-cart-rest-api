@@ -28,10 +28,32 @@ class CartController extends Controller
             $this->products = $this->processProducts($params['products']);
             $this->addGiftProduct();
 
-            return response($this->products, 200);
+            return response(
+                $this->getResume($this->products),
+                200
+            );
         } catch (\Exception $e) {
             return response($e->getMessage(), 422);
         }
+    }
+
+    private function getResume(array $products): array
+    {
+        $cartResume = [
+            'total_amount' => 0,
+            'total_amount_with_discount' => 0,
+            'total_discount' => 0,
+        ];
+        foreach ($products as $product) {
+            $cartResume['total_amount'] += $product->total_amount;
+            $cartResume['total_amount_with_discount'] += (
+                $product->total_amount - $product->discount
+            );
+            $cartResume['total_discount'] += $product->discount;
+        }
+
+        $cartResume['products'] = $products;
+        return $cartResume;
     }
 
     private function processProducts($products)
