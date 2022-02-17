@@ -7,7 +7,7 @@ use Discount\DiscountClient;
 use Discount\GetDiscountRequest;
 use Grpc\ChannelCredentials;
 
-class ProductDiscount
+class ProductDiscountService
 {
     /** @var  DiscountClient */
     private $client;
