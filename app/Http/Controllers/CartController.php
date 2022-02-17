@@ -13,17 +13,11 @@ class CartController extends Controller
     public function addProduct(Request $request)
     {
         try {
-            if (!$request->isJson()) {
-                throw new ProductException('Payload should be a JSON');
-            }
+            $this->validate($request, [
+                'products' => 'required',
+            ]);
 
             $params = $request->json()->all();
-
-            if (empty($params['products'])) {
-                throw new ProductException(
-                    'Payload should have \'products\' index'
-                );
-            }
 
             $this->products = $this->processProducts($params['products']);
             $this->addGiftProduct();
