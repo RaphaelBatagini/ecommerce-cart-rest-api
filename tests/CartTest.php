@@ -2,6 +2,21 @@
 
 class CartTest extends TestCase
 {
+    private $cartPayload;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->cartPayload = [
+            'products' => [
+                [
+                    'id' => 2,
+                    'quantity' => 2
+                ]
+            ]
+        ];
+    }
+
     /**
      * Test if cart contents keep returning even if the API can't reach the
      * gRPC service
@@ -15,14 +30,7 @@ class CartTest extends TestCase
         $this->json(
             'POST',
             '/cart/add',
-            [
-                'products' => [
-                    [
-                        'id' => 2,
-                        'quantity' => 2
-                    ]
-                ]
-            ]
+            $this->cartPayload
         );
 
         $response = json_decode($this->response->getContent());
@@ -39,17 +47,13 @@ class CartTest extends TestCase
      */
     public function testCartDoesntAcceptGiftProduct()
     {
+        // 6 is a gift product
+        $this->cartPayload['products'][0]['id'] = 6;
+
         $this->json(
             'POST',
             '/cart/add',
-            [
-                'products' => [
-                    [
-                        'id' => 6, // 6 is a gift product
-                        'quantity' => 2
-                    ]
-                ]
-            ]
+            $this->cartPayload
         );
 
         $this->assertEquals(422, $this->response->getStatusCode());
