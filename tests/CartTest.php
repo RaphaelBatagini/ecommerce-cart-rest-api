@@ -69,6 +69,37 @@ class CartTest extends TestCase
             $this->cartPayload
         );
 
-        $this->assertEquals(422, $this->response->getStatusCode());
+        $this->assertEquals(
+            422,
+            $this->response->getStatusCode(),
+            'Failed asserting that cart give error if user try to add gift product'
+        );
+    }
+
+    /**
+     * Test if gift product is added to cart if is black friday
+     * payload
+     *
+     * @return void
+     */
+    public function testCartAddGiftProductIfIsBlackfriday()
+    {
+        $_ENV['BLACKFRIDAY_DATE'] = date('Y/m/d');
+
+        $this->json(
+            'POST',
+            '/cart/add',
+            $this->cartPayload
+        );
+
+        $response = json_decode($this->response->getContent());
+        $giftProduct = array_filter($response->products, function($product) {
+            return $product->is_gift;
+        });
+
+        $this->assertNotEmpty(
+            $giftProduct,
+            'Failed asserting that cart give gift product if is blackfriday'
+        );
     }
 }
