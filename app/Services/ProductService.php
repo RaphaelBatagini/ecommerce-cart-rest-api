@@ -28,23 +28,14 @@ class ProductService
         $this->productDiscountService = new ProductDiscountService();
     }
 
-    public function getAllProducts()
+    public function getAllProducts(): array
     {
-        return $this->getProductsCollection();
+        return (new ProductsCollection($this->products))->toArray();
     }
 
-    public function getAllGiftProducts()
+    public function getAllGiftProducts(): array
     {
-        return $this->getProductsCollection(true);
-    }
-
-    private function getProductsCollection($giftProducts = false)
-    {
-        if ($giftProducts) {
-            return new GiftProductsCollection($this->products);
-        }
-
-        return new ProductsCollection($this->products);
+        return (new GiftProductsCollection($this->products))->toArray();
     }
 
     public function get(int $id): bool | ProductDTO

@@ -18,12 +18,17 @@ class CartDTO
         $this->productDiscountService = new ProductDiscountService();
     }
 
-    public function addProduct(ProductDTO $product, int $quantity): void
+    public function addProduct(ProductDTO|array $product, int $quantity): void
     {
+        if (is_array($product)) {
+            $product = new ProductDTO($product);
+        }
+
         if ($product->getIsGift()) {
             $product->setAmount(0);
         }
 
+        $discount = 0;
         if (!$product->getIsGift()) {
             $discount = $this->productDiscountService
                 ->getProductDiscount($product->getId());

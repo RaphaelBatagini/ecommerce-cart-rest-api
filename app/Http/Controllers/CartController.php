@@ -16,7 +16,7 @@ class CartController extends Controller
         $this->cart = new CartDTO();
     }
 
-    public function addProduct(Request $request)
+    public function addProducts(Request $request)
     {
         try {
             $this->validate($request, [
@@ -49,7 +49,7 @@ class CartController extends Controller
 
         if (!$product || $product->getIsGift()) {
             throw new ProductException(
-                "Produto de ID {$product['id']} não encontrado ou não permitido"
+                "Produto de ID {$productId} não encontrado ou não permitido"
             );
         }
 
@@ -63,13 +63,13 @@ class CartController extends Controller
         }
 
         $productService = new ProductService();
-        $giftProducts = $productService->getAllGiftProducts();
+        $giftProductsCollection = $productService->getAllGiftProducts();
 
-        if (empty($giftProducts)) {
+        if (empty($giftProductsCollection)) {
             return;
         }
 
-        $giftProduct = $giftProducts[0];
+        $giftProduct = array_shift($giftProductsCollection);
 
         $this->cart->addProduct($giftProduct, 1);
     }

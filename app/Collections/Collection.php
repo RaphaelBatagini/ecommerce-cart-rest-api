@@ -6,14 +6,11 @@ use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use LimitIterator;
 
 abstract class Collection implements ArrayAccess, Countable, IteratorAggregate
 {
     protected $items;
     protected $position;
-
-    const PAGE_LENGTH = 10;
 
     public function __construct(array $items = [])
     {
@@ -57,14 +54,5 @@ abstract class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->items);
-    }
-
-    public function paginate(int $offset = 0)
-    {
-        return new LimitIterator(
-            $this->getIterator(),
-            $offset * self::PAGE_LENGTH,
-            self::PAGE_LENGTH
-        );
     }
 }

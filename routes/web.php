@@ -19,6 +19,6 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'cart'], function () use ($router) {
     $router->post('add', [
-        'uses' => 'CartController@addProduct'
+        'uses' => 'CartController@addProducts'
     ]);
 });

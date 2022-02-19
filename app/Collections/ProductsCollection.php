@@ -6,12 +6,13 @@ use App\Collections\Collection;
 
 class ProductsCollection extends Collection
 {
-    public function paginate($offset = 0)
+    public function toArray(): array
     {
-        $iterator = parent::paginate($offset);
-
-        return array_map(function ($item) {
-            return $item->toArray();
-        }, iterator_to_array($iterator));
+        return array_values(array_map(
+            function ($item) {
+                return $item->toArray();
+            },
+            iterator_to_array($this->getIterator())
+        ));
     }
 }

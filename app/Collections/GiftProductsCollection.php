@@ -2,13 +2,13 @@
 
 namespace App\Collections;
 
-use App\Filters\ProductFilter;
+use App\Filters\GiftProductFilter;
 
 class GiftProductsCollection extends ProductsCollection
 {
-    public function getIterator()
+    public function getIterator(): GiftProductFilter
     {
-        return new ProductFilter(parent::getIterator(), true);
+        return new GiftProductFilter(parent::getIterator(), true);
     }
 
     public function count()

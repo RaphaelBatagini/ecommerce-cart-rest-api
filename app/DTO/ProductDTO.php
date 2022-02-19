@@ -20,7 +20,7 @@ class ProductDTO
         }
 
         if (strpos($name, 'set') !== false) {
-            return $this->product[$attributeName] = $arguments;
+            return $this->product[$attributeName] = $arguments[0];
         }
     }
 
