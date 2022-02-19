@@ -10,10 +10,12 @@ use App\Services\ProductService;
 class CartController extends Controller
 {
     private $cart;
+    private $productService;
 
-    public function __construct()
+    public function __construct(ProductService $productService)
     {
         $this->cart = new CartDTO();
+        $this->productService = $productService;
     }
 
     public function addProducts(Request $request)
@@ -44,8 +46,7 @@ class CartController extends Controller
 
     private function getProductData($productId)
     {
-        $productService = new ProductService();
-        $product = $productService->get($productId);
+        $product = $this->productService->get($productId);
 
         if (!$product || $product->getIsGift()) {
             throw new ProductException(
@@ -62,8 +63,7 @@ class CartController extends Controller
             return;
         }
 
-        $productService = new ProductService();
-        $giftProductsCollection = $productService->getAllGiftProducts();
+        $giftProductsCollection = $this->productService->getAllGiftProducts();
 
         if (empty($giftProductsCollection)) {
             return;

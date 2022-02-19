@@ -1,5 +1,7 @@
 <?php
 
+use App\DTO\ProductDTO;
+
 class CartTest extends TestCase
 {
     private $cartPayload;
@@ -47,8 +49,19 @@ class CartTest extends TestCase
      */
     public function testCartDoesntAcceptGiftProduct()
     {
-        // 6 is a gift product
-        $this->cartPayload['products'][0]['id'] = 6;
+        // Mock ProductService::get to always return product with isGift true
+        $productDTOMock = new ProductDTO(
+            $this->cartPayload['products'][0]
+        );
+        $productDTOMock->setIsGift(true);
+
+        $productService = Mockery::mock('App\Services\ProductService');
+        $productService->shouldReceive('get')
+            ->once()
+            ->andReturn($productDTOMock);
+
+        $this->app->instance('App\Services\ProductService', $productService);
+        // End Mock
 
         $this->json(
             'POST',
