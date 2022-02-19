@@ -18,7 +18,10 @@ $ docker-compose up -d
 A instalação das dependencias do projeto é feita assim que o docker é iniciado. Portanto, não há necessidade de realizar este procedimento manualmente.
 
 ## Executando os testes unitários
-
+Para executar os testes, estando com os containers do docker rodando, basta utilizar o seguinte comando:
+```
+$ docker-compose run phpunit
+```
 
 ## Interagindo com o composer
 Para executar qualquer ação no composer do PHP utilizar o seguinte comando:

@@ -23,3 +23,11 @@ services:
     image: hashorg/hash-mock-discount-service
     ports:
       - '50051:50051'
+
+  phpunit:
+    container_name: '${APP_NAME}_tests'
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    entrypoint: vendor/bin/phpunit
