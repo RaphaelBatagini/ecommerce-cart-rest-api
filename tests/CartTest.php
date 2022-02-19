@@ -30,4 +30,28 @@ class CartTest extends TestCase
         $this->assertEquals(0, $response->total_discount);
         $this->assertEquals(0, $response->products[0]->discount);
     }
+
+    /**
+     * Test if cart doesnt accept gift product on add product to card endpoint
+     * payload
+     *
+     * @return void
+     */
+    public function testCartDoesntAcceptGiftProduct()
+    {
+        $this->json(
+            'POST',
+            '/cart/add',
+            [
+                'products' => [
+                    [
+                        'id' => 6, // 6 is a gift product
+                        'quantity' => 2
+                    ]
+                ]
+            ]
+        );
+
+        $this->assertEquals(422, $this->response->getStatusCode());
+    }
 }
