@@ -93,13 +93,18 @@ class CartTest extends TestCase
         );
 
         $response = json_decode($this->response->getContent());
-        $giftProduct = array_filter($response->products, function($product) {
+        $giftProducts = array_filter($response->products, function($product) {
             return $product->is_gift;
         });
 
         $this->assertNotEmpty(
-            $giftProduct,
+            $giftProducts,
             'Failed asserting that cart give gift product if is blackfriday'
+        );
+        $this->assertCount(
+            1,
+            $giftProducts,
+            'Failed asserting that cart give only one gift product in blackfriday'
         );
     }
 }
