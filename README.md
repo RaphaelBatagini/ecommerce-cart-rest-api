@@ -72,6 +72,8 @@ The API response should bring the total value of the cart with and without disco
 ## Tech Stack
 - PHP 8.0.2
 - Framework Lumen 8
+- PHPUnit 9.5
+- gRPC
 - Docker
 - Docker Compose
 
