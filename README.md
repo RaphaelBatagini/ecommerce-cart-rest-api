@@ -1,4 +1,4 @@
-# HTTP E-commerce Cart API.
+# HTTP E-commerce Cart API
 
 An e-commerce cart API.
 
