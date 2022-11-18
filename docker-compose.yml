@@ -9,7 +9,7 @@ services:
 
   api:
     container_name: 'http_ecommerce_cart_api_api'
-    build: .
+    image: raphaelbatagini/apache-php-grpc:8.0.2
     ports:
       - '80:80'
     volumes:
@@ -26,7 +26,7 @@ services:
 
   tests:
     container_name: 'http_ecommerce_cart_api_tests'
-    build: .
+    image: raphaelbatagini/apache-php-grpc:8.0.2
     volumes:
       - .:/app
     working_dir: /app
