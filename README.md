@@ -1,5 +1,7 @@
 # HTTP E-commerce Cart API
 
+![Test status](https://github.com/RaphaelBatagini/http-ecommerce-cart-api/actions/workflows/tests.yml/badge.svg?branch=main)
+
 An e-commerce cart API.
 
 ## Project Description

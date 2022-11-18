@@ -1,14 +1,14 @@
 version: '3.5'
 services:
   config:
-    container_name: '${APP_NAME}_config'
+    container_name: 'http_ecommerce_cart_api_config'
     image: 'composer:2.1.5'
     volumes:
       - './:/app'
     command: composer install --ignore-platform-reqs
 
   api:
-    container_name: '${APP_NAME}_api'
+    container_name: 'http_ecommerce_cart_api_api'
     build: .
     ports:
       - '80:80'
@@ -19,15 +19,17 @@ services:
         condition: service_completed_successfully
 
   discount-service:
-    container_name: '${APP_NAME}_discount_service'
+    container_name: 'http_ecommerce_cart_api_discount_service'
     image: hashorg/hash-mock-discount-service
     ports:
       - '50051:50051'
 
-  phpunit:
-    container_name: '${APP_NAME}_tests'
+  tests:
+    container_name: 'http_ecommerce_cart_api_tests'
     build: .
     volumes:
       - .:/app
     working_dir: /app
-    entrypoint: vendor/bin/phpunit
+    entrypoint: vendor/bin/phpunit tests
+    depends_on:
+      - api
