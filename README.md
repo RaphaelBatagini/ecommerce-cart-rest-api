@@ -1,6 +1,6 @@
 # E-commerce Cart REST API
 
-![Test status](https://github.com/RaphaelBatagini/http-ecommerce-cart-api/actions/workflows/tests.yml/badge.svg?branch=main)
+![Test status](https://github.com/RaphaelBatagini/ecommerce-cart-rest-api/actions/workflows/tests.yml/badge.svg?branch=main)
 
 An e-commerce cart API.
 
