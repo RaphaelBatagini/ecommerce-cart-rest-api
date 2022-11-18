@@ -6,7 +6,7 @@ An e-commerce cart API.
 
 ## Project Description
 
-The API receives a POST request in its only endpoint. The payload includes a list of products and its quantities like the example below:
+The API receives a POST request in its only endpoint (`/cart/add`). The payload includes a list of products and its quantities like the example below:
 
 ```json
 {
