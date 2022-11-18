@@ -1,4 +1,4 @@
-# HTTP E-commerce Cart API
+# E-commerce Cart REST API
 
 ![Test status](https://github.com/RaphaelBatagini/http-ecommerce-cart-api/actions/workflows/tests.yml/badge.svg?branch=main)
 

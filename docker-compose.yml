@@ -1,14 +1,14 @@
 version: '3.5'
 services:
   config:
-    container_name: 'http_ecommerce_cart_api_config'
+    container_name: 'ecommerce_cart_rest_api_config'
     image: 'composer:2.1.5'
     volumes:
       - './:/app'
     command: composer install --ignore-platform-reqs
 
-  api:
-    container_name: 'http_ecommerce_cart_api_api'
+  backend:
+    container_name: 'ecommerce_cart_rest_api_backend'
     image: raphaelbatagini/apache-php-grpc:8.0.2
     ports:
       - '80:80'
@@ -19,13 +19,13 @@ services:
         condition: service_completed_successfully
 
   discount-service:
-    container_name: 'http_ecommerce_cart_api_discount_service'
+    container_name: 'ecommerce_cart_rest_api_discount_service'
     image: hashorg/hash-mock-discount-service
     ports:
       - '50051:50051'
 
   tests:
-    container_name: 'http_ecommerce_cart_api_tests'
+    container_name: 'ecommerce_cart_rest_api_tests'
     image: raphaelbatagini/apache-php-grpc:8.0.2
     volumes:
       - .:/app
