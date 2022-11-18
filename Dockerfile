@@ -8,5 +8,5 @@ RUN apt-get install -y \
 RUN docker-php-ext-configure zip
 RUN docker-php-ext-install zip && a2enmod rewrite
 
-RUN pecl install grpc \
+RUN MAKEFLAGS="-j $(nproc)" pecl install grpc \
     && docker-php-ext-enable grpc
