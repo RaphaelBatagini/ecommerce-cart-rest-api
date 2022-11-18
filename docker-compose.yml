@@ -26,10 +26,11 @@ services:
 
   tests:
     container_name: 'http_ecommerce_cart_api_tests'
-    build:
-      context: .
-      dockerfile: Dockerfile.tests
+    build: .
     volumes:
       - .:/app
     working_dir: /app
     entrypoint: vendor/bin/phpunit tests
+    depends_on:
+      config:
+        condition: service_completed_successfully
